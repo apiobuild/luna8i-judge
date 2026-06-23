@@ -1,0 +1,12 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "caption": {
+      "type": "string",
+      "description": "One to two sentence description of the image, or the string \"unanswerable\" if image quality is too poor to describe."
+    }
+  },
+  "required": ["caption"],
+  "additionalProperties": false
+}
