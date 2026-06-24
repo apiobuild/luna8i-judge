@@ -178,11 +178,14 @@ def main() -> None:
 
     write_jsonl(
         EXAMPLES_DIR / "image_captioning" / "input.jsonl",
-        [r["input_row"] for r in all_rows],
+        [{"row_index": idx, **r["input_row"]} for idx, r in enumerate(all_rows)],
     )
     write_jsonl(
         EXAMPLES_DIR / "image_captioning" / "ground_truth.jsonl",
-        [{"output": r["ground_truth_output"]} for r in all_rows],
+        [
+            {"row_index": idx, "output": r["ground_truth_output"]}
+            for idx, r in enumerate(all_rows)
+        ],
     )
     print("\nDone. Run `git add examples/image_captioning/` to stage the outputs.")
 
