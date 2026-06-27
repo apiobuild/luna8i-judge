@@ -14,13 +14,12 @@ Benchmarks candidate models on image captioning using 50 images from the
 Poor-quality images have `"output": "unanswerable"` in `ground_truth.jsonl` — these are images
 whose quality was too low for human annotators to describe.
 
-## Files
+## Inputs
 
 | File | Description |
 |---|---|
 | `input.jsonl` | 50 rows, each an OpenAI `messages` payload with one image URL + caption prompt |
 | `ground_truth.jsonl` | First human caption per image; `"unanswerable"` for poor-quality images |
-| `golden_dataset.jsonl` | State-of-the-art model outputs used as the quality ceiling for candidate scoring |
 | `output_schema.json` | JSON Schema for the expected `{"caption": "..."}` response format |
 | `images/` | Downloaded image files (≤ 1 MB each) |
 | `build_dataset.py` | Curation script — re-run to regenerate |
@@ -69,6 +68,12 @@ export GEMINI_API_KEY=...
 
 ## Running golden dataset generation
 
+**Files**
+
+| File | Description |
+|---|---|
+| `golden_dataset.jsonl` | State-of-the-art model outputs used as the quality ceiling for candidate scoring |
+
 ***Note: A pre-generated `golden_dataset.jsonl` is committed to this directory so you can skip directly to inference if you prefer.***
 
 Generate a sample `golden_dataset.jsonl` on the first 5 rows to verify everything looks right:
@@ -95,11 +100,10 @@ Expected output:
 ```json
 {
   "detected_workload_details": {
-    "workload_type": "captioning",
+    "workload_type": "summarization",
     "modality": "image",
     "confidence": "high",
     "confidence_note": "The prompt explicitly asks to describe an image, which aligns directly with the captioning category."
-  }
 }
 ```
 
@@ -112,14 +116,22 @@ luna8i-judge job create \
   --prompt-template "Describe this image in one to two sentences\. If the image quality is too poor to make out any content, respond with \{\\\"caption\\\": \\\"unanswerable\\\"\}\." \
   --sota-model gemini/gemini-3.1-flash-lite \
   --output ./ \
-  --run
+  --run // <- this will run the job at create
 ```
 
 ## Running inference against benchmarking models
 
-### Running inference with (Local) Ollama
+### Files
 
-***Note: Pre-generated `ollama__llava.jsonl` and `ollama__minicpm-v.jsonl` are committed to this directory so you can skip running inference if you prefer.***
+***Note: Pre-generated `inference/ollama__llava.jsonl` and `inference/ollama__minicpm-v.jsonl` are committed so you can skip running inference if you prefer.***
+
+
+| File | Description |
+|---|---|
+| `inference/ollama__llava.jsonl` | Pre-generated inference output for `ollama/llava` |
+| `inference/ollama__minicpm-v.jsonl` | Pre-generated inference output for `ollama/minicpm-v` |
+
+### Running inference with (Local) Ollama
 
 Run local vision-capable models via [Ollama](https://ollama.com). Start Ollama before running:
 
@@ -143,8 +155,8 @@ Pull each model, append its results to the same job, then unload before the next
 ```bash
 # LLaVA 7B
 luna8i-judge models ollama pull llava
-luna8i-judge job run <job-id> \
-  --step running_inference \
+luna8i-judge job run $JOB_ID \
+  --step run_compare_models_inference \
   --golden-dataset-path golden_dataset.jsonl \
   --compare-models '[{"model": "ollama/llava"}]' \
   --force
@@ -152,8 +164,8 @@ luna8i-judge models ollama unload llava
 
 # MiniCPM-V 2.6
 luna8i-judge models ollama pull minicpm-v
-luna8i-judge job run <job-id> \ a8c21611-fa34-43c4-9590-22a8240e91b2
-  --step running_inference \
+luna8i-judge job run $JOB_ID \
+  --step run_compare_models_inference \
   --golden-dataset-path golden_dataset.jsonl \
   --compare-models '[{"model": "ollama/minicpm-v"}]' \
   --force
@@ -161,3 +173,35 @@ luna8i-judge models ollama unload minicpm-v
 ```
 
 `--force` appends the new model's results to the existing job without regenerating the golden dataset.
+
+## Running evaluation (LLM-as-judge)
+
+### Files
+
+***Note: Pre-generated evaluation results are committed to `evaluation/`.***
+
+| File | Description |
+|---|---|
+| `evaluation/ollama__llava.jsonl` | Per-row judge scores for `ollama/llava` |
+| `evaluation/ollama__llava_evaluation_result.json` | Aggregated evaluation result for `ollama/llava` |
+| `evaluation/ollama__minicpm-v.jsonl` | Per-row judge scores for `ollama/minicpm-v` |
+| `evaluation/ollama__minicpm-v_evaluation_result.json` | Aggregated evaluation result for `ollama/minicpm-v` |
+
+
+The captioning workload uses LLM-as-judge (`sota_model` scores each candidate caption against the
+golden caption on four criteria: faithfulness, completeness, conciseness, instruction following).
+
+```bash
+luna8i-judge job run $JOB_ID \
+  --step run_compare_models_evaluation
+```
+
+This reads `./golden_dataset.jsonl` and `./inference/ollama__llava.jsonl` /
+`./inference/ollama__minicpm-v.jsonl`, calls the judge for each `(candidate, golden)` pair,
+and writes per-model results to `./evaluation/`.
+
+Check the evaluation results:
+
+```bash
+luna8i-judge job get <job-id>
+```
