@@ -84,6 +84,7 @@ luna8i-judge job create \
   --output-json-schema output_schema.json \
   --prompt-template 'Describe this image in one to two sentences. If the image quality is too poor to make out any content, respond with {"caption": "unanswerable"}.' \
   --sota-model gemini/gemini-3.1-flash-lite \
+  --compare-models '[{"model": "ollama/llava"}, {"model": "ollama/minicpm-v"}]' \
   --output ./ \
   --limit 5 \
   --run
@@ -115,6 +116,7 @@ luna8i-judge job create \
   --output-json-schema output_schema.json \
   --prompt-template 'Describe this image in one to two sentences\. If the image quality is too poor to make out any content, respond with {"caption": "unanswerable"}.' \
   --sota-model gemini/gemini-3.1-flash-lite \
+  --compare-models '[{"model": "ollama/llava"}, {"model": "ollama/minicpm-v"}]' \
   --output ./ \
   --run // <- this will run the job at create
 ```
@@ -157,8 +159,8 @@ Pull each model, append its results to the same job, then unload before the next
 luna8i-judge models ollama pull llava
 luna8i-judge job run $JOB_ID \
   --step run_compare_models_inference \
+  --run-models '["ollama/llava"]'\
   --golden-dataset-path golden_dataset.jsonl \
-  --compare-models '[{"model": "ollama/llava"}]' \
   --force
 luna8i-judge models ollama unload llava
 
@@ -166,8 +168,8 @@ luna8i-judge models ollama unload llava
 luna8i-judge models ollama pull minicpm-v
 luna8i-judge job run $JOB_ID \
   --step run_compare_models_inference \
+  --run-models '["ollama/minicpm-v"]'\
   --golden-dataset-path golden_dataset.jsonl \
-  --compare-models '[{"model": "ollama/minicpm-v"}]' \
   --force
 luna8i-judge models ollama unload minicpm-v
 ```
