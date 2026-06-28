@@ -82,7 +82,7 @@ Generate a sample `golden_dataset.jsonl` on the first 5 rows to verify everythin
 luna8i-judge job create \
   --file input.jsonl \
   --output-json-schema output_schema.json \
-  --prompt-template "Describe this image in one to two sentences\. If the image quality is too poor to make out any content, respond with \{\\\"caption\\\": \\\"unanswerable\\\"\}\." \
+  --prompt-template 'Describe this image in one to two sentences. If the image quality is too poor to make out any content, respond with {"caption": "unanswerable"}.' \
   --sota-model gemini/gemini-3.1-flash-lite \
   --output ./ \
   --limit 5 \
@@ -113,7 +113,7 @@ Once you're happy with the sample, generate the full `golden_dataset.jsonl` (thi
 luna8i-judge job create \
   --file input.jsonl \
   --output-json-schema output_schema.json \
-  --prompt-template "Describe this image in one to two sentences\. If the image quality is too poor to make out any content, respond with \{\\\"caption\\\": \\\"unanswerable\\\"\}\." \
+  --prompt-template 'Describe this image in one to two sentences\. If the image quality is too poor to make out any content, respond with {"caption": "unanswerable"}.' \
   --sota-model gemini/gemini-3.1-flash-lite \
   --output ./ \
   --run // <- this will run the job at create
