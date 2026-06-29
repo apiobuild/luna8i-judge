@@ -114,7 +114,7 @@ Once you're happy with the sample, generate the full `golden_dataset.jsonl` (thi
 luna8i-judge job create \
   --file input.jsonl \
   --output-json-schema output_schema.json \
-  --prompt-template 'Describe this image in one to two sentences\. If the image quality is too poor to make out any content, respond with {"caption": "unanswerable"}.' \
+  --prompt-template 'Describe this image in one to two sentences. If the image quality is too poor to make out any content, respond with {"caption": "unanswerable"}.' \
   --sota-model gemini/gemini-3.1-flash-lite \
   --compare-models '[{"model": "ollama/llava"}, {"model": "ollama/minicpm-v"}]' \
   --output ./ \
@@ -141,6 +141,8 @@ Run local vision-capable models via [Ollama](https://ollama.com). Start Ollama b
 luna8i-judge models ollama start
 ```
 
+The command prints the `export` line to run — copy and paste it into your shell to set `OLLAMA_HOST`.
+
 These two models run well on a MacBook Pro (Apple Silicon or Intel) with 18 GB unified memory:
 
 | Model string | Description | Disk / RAM |
@@ -150,31 +152,14 @@ These two models run well on a MacBook Pro (Apple Silicon or Intel) with 18 GB u
 
 > **Note:** The input rows reference raw GitHub URLs. Make sure the images are pushed to `main` before running, or Ollama will fail to fetch them.
 
-### Model 1: ollama/llava
-
-Pull each model, append its results to the same job, then unload before the next.
+Run inference against each model with `--auto` — which pulls the model before inference and unloads it after, so only one model occupies memory at a time.
 
 ```bash
-# LLaVA 7B
-luna8i-judge models ollama pull llava
 luna8i-judge job run $JOB_ID \
   --step run_compare_models_inference \
-  --run-models '["ollama/llava"]'\
   --golden-dataset-path golden_dataset.jsonl \
-  --force
-luna8i-judge models ollama unload llava
-
-# MiniCPM-V 2.6
-luna8i-judge models ollama pull minicpm-v
-luna8i-judge job run $JOB_ID \
-  --step run_compare_models_inference \
-  --run-models '["ollama/minicpm-v"]'\
-  --golden-dataset-path golden_dataset.jsonl \
-  --force
-luna8i-judge models ollama unload minicpm-v
+  --auto
 ```
-
-`--force` appends the new model's results to the existing job without regenerating the golden dataset.
 
 ## Running evaluation (LLM-as-judge)
 
