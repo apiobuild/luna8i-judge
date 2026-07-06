@@ -1,0 +1,35 @@
+{
+  "model": "qwen/qwen3.6-35b-a3b",
+  "params": {},
+  "workload_type": "captioning",
+  "inference_usage": {
+    "total_input_tokens": 59556,
+    "total_output_tokens": 29571,
+    "mean_input_tokens": 1191.1,
+    "mean_output_tokens": 591.4,
+    "successful_rows": 50,
+    "latency_ms": {
+      "mean": 5882.3,
+      "p50": 4929,
+      "p95": 11268
+    }
+  },
+  "failure_rate": 0.0,
+  "metrics": {
+    "mean_scores": {
+      "faithfulness": 4.82,
+      "completeness": 4.9,
+      "conciseness": 4.36,
+      "instruction following": 5.0
+    },
+    "overall_mean": 4.77,
+    "evaluated_rows": 50,
+    "failed_rows": 0,
+    "judge_input_tokens": 67269,
+    "judge_output_tokens": 1450
+  },
+  "evaluation_usage": {
+    "judge_input_tokens": 67269,
+    "judge_output_tokens": 1450
+  }
+}
