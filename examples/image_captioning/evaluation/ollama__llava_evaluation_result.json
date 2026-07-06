@@ -2,6 +2,19 @@
   "model": "ollama/llava",
   "params": {},
   "workload_type": "captioning",
+  "inference_usage": {
+    "total_input_tokens": 31050,
+    "total_output_tokens": 1866,
+    "mean_input_tokens": 621.0,
+    "mean_output_tokens": 37.3,
+    "successful_rows": 50,
+    "latency_ms": {
+      "mean": 12549.4,
+      "p50": 11609,
+      "p95": 17179
+    }
+  },
+  "failure_rate": 0.0,
   "metrics": {
     "mean_scores": {
       "faithfulness": 2.98,
@@ -15,19 +28,6 @@
     "judge_input_tokens": 66739,
     "judge_output_tokens": 1450
   },
-  "inference_usage": {
-    "total_input_tokens": 31050,
-    "total_output_tokens": 1866,
-    "mean_input_tokens": 621.0,
-    "mean_output_tokens": 37.3,
-    "latency_ms": {
-      "mean": 12549.4,
-      "p50": 11609,
-      "p95": 17179
-    },
-    "successful_rows": 50
-  },
-  "failure_rate": 0.0,
   "evaluation_usage": {
     "judge_input_tokens": 66739,
     "judge_output_tokens": 1450

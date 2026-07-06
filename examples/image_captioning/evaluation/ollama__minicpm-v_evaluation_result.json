@@ -2,6 +2,19 @@
   "model": "ollama/minicpm-v",
   "params": {},
   "workload_type": "captioning",
+  "inference_usage": {
+    "total_input_tokens": 24162,
+    "total_output_tokens": 1960,
+    "mean_input_tokens": 483.2,
+    "mean_output_tokens": 39.2,
+    "successful_rows": 50,
+    "latency_ms": {
+      "mean": 27519.4,
+      "p50": 25429,
+      "p95": 43652
+    }
+  },
+  "failure_rate": 0.0,
   "metrics": {
     "mean_scores": {
       "faithfulness": 3.8,
@@ -15,19 +28,6 @@
     "judge_input_tokens": 65637,
     "judge_output_tokens": 1450
   },
-  "inference_usage": {
-    "total_input_tokens": 24162,
-    "total_output_tokens": 1960,
-    "mean_input_tokens": 483.2,
-    "mean_output_tokens": 39.2,
-    "latency_ms": {
-      "mean": 27519.4,
-      "p50": 25429,
-      "p95": 43652
-    },
-    "successful_rows": 50
-  },
-  "failure_rate": 0.0,
   "evaluation_usage": {
     "judge_input_tokens": 65637,
     "judge_output_tokens": 1450

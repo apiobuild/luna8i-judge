@@ -217,9 +217,10 @@ Once evaluation is complete, generate cost and feasibility projections across ma
 
 ### Files
 
-| File                         | Description                                                                                          |
-| ---------------------------- | ---------------------------------------------------------------------------------------------------- |
-| `scale_and_cost_report.json` | Token usage stats (p50/p95/p99) and cost projections per model for managed and self-hosted providers |
+| File                         | Description                                                                                    |
+| ---------------------------- | ---------------------------------------------------------------------------------------------- |
+| `scale_and_cost_report.json` | Token usage stats (p50/p95/p99) and cost projections across managed and self-hosted providers  |
+| `report.html`                | Human-readable report rendered from `scale_and_cost_report.json`                              |
 
 ```bash
 luna8i-judge job run $JOB_ID \
