@@ -4740,5 +4740,36 @@
         }
       ]
     }
-  }
+  },
+  "job": {
+    "job_id": "bbe566f7-5ffc-451c-b876-c108bf5e79f3",
+    "alias": "Image Captioning Model Evaluation Report",
+    "workload_type": "captioning",
+    "input_modality": "image",
+    "sota_model": "gemini/gemini-3.1-flash-lite",
+    "compare_models": [
+      {
+        "model": "ollama/llava",
+        "params": {}
+      },
+      {
+        "model": "ollama/minicpm-v",
+        "params": {}
+      },
+      {
+        "model": "qwen/qwen3.6-35b-a3b",
+        "params": {}
+      }
+    ],
+    "projection_by_num_records": [
+      10000,
+      100000,
+      500000,
+      1000000
+    ],
+    "target_sla_hours": null,
+    "model_hosting_preference": null,
+    "created_at": "2026-07-06T04:56:13.854942+00:00"
+  },
+  "description": "Benchmarks three candidate vision models (ollama/llava, ollama/minicpm-v, qwen/qwen3.6-35b-a3b) on image captioning using 50 images from the [VizWiz-Captions](https://vizwiz.org/tasks-and-tools/image-captioning/) dataset, including 10 poor-quality unanswerable images. Uses gemini/gemini-3.1-flash-lite as the SOTA model and LLM-as-judge to score each candidate on faithfulness, completeness, conciseness, and instruction following. See the full example description [here](https://github.com/apiobuild/luna8i-judge/blob/main/examples/image_captioning/README.md)."
 }

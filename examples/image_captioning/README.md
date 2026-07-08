@@ -1,7 +1,7 @@
 # Image Captioning Example
 
 Benchmarks candidate models on image captioning using 50 images from the
-[VizWiz-Captions](https://vizwiz.org/tasks-and-tools/image-captioning/) val split (CC-BY 4.0).
+[VizWiz-Captions](https://vizwiz.org/tasks-and-tools/image-captioning/) dataset (CC-BY 4.0).
 
 ## Dataset
 
