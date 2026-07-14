@@ -1,6 +1,6 @@
 [project]
 name = "luna8i-judge"
-version = "0.1.0"
+version = "0.0.0"
 description = "Benchmark tool for LLM batch workloads — compare cost and quality across candidate models vs. a SOTA baseline."
 license = "MIT"
 requires-python = ">=3.12"
